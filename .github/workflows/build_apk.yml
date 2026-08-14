@@ -30,12 +30,14 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # 4. Get all your package dependencies
+          # 4. Get all your package dependencies
       - name: Install Dependencies
+        working-directory: ./Padi-da-Parama   # <--- ADD THIS LINE
         run: flutter pub get
 
-      # 5. Build the APK (Using --debug so it installs easily without requiring digital signing!)
+           # 5. Build the APK
       - name: Build Debug APK
+        working-directory: ./Padi-da-Parama   # <--- ADD THIS LINE
         run: flutter build apk --debug --split-per-abi
 
       # 6. Upload the generated APK to GitHub Actions Artifacts
