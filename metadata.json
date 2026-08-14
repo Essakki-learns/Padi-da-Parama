@@ -1,0 +1,6 @@
+{
+  "name": "Padi da Parama",
+  "description": "Student Dashboard integrating grade tracking, schedule management, syllabus progression, habits, goals, notes, and task lists.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
