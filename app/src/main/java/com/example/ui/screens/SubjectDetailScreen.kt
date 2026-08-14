@@ -338,6 +338,7 @@ fun SubjectDetailScreen(
                         value = topicName,
                         onValueChange = { topicName = it },
                         label = { Text("Name / Description *") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 

@@ -125,6 +125,7 @@ fun GoalsScreen(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text("Goal Title *") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -132,6 +133,7 @@ fun GoalsScreen(
                         value = description,
                         onValueChange = { description = it },
                         label = { Text("Description & Outcome") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -280,6 +282,7 @@ fun GoalCardItem(
                     value = newSubtaskText,
                     onValueChange = { newSubtaskText = it },
                     placeholder = { Text("Add next action step...", fontSize = 12.sp) },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.weight(1f),
                     singleLine = true
                 )

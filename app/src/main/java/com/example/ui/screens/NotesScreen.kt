@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.entities.NoteEntity
-import com.example.ui.theme.PrimaryIndigo
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudentViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,10 +78,7 @@ fun NotesScreen(
                         placeholder = { Text("Filter notes & tags...") },
                         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedBorderColor = Color.Transparent,
-                            focusedBorderColor = PrimaryIndigo
-                        )
+                        colors = appTextFieldColors()
                     )
                 }
             }
@@ -133,6 +129,7 @@ fun NotesScreen(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text("Note Title *") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -140,6 +137,7 @@ fun NotesScreen(
                         value = content,
                         onValueChange = { content = it },
                         label = { Text("Note Content (Use [[Topic]] for backlinks)") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth().height(160.dp),
                         maxLines = 8
                     )
@@ -148,6 +146,7 @@ fun NotesScreen(
                         value = tags,
                         onValueChange = { tags = it },
                         label = { Text("Tags (comma-separated, e.g. Cloud, K8s)") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -194,6 +193,7 @@ fun NotesScreen(
                         value = editTitle,
                         onValueChange = { editTitle = it },
                         label = { Text("Title") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -201,6 +201,7 @@ fun NotesScreen(
                         value = editContent,
                         onValueChange = { editContent = it },
                         label = { Text("Content") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth().height(160.dp),
                         maxLines = 8
                     )
@@ -209,6 +210,7 @@ fun NotesScreen(
                         value = editTags,
                         onValueChange = { editTags = it },
                         label = { Text("Tags") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 

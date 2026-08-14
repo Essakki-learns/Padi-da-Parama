@@ -115,10 +115,7 @@ fun DocumentsScreen(
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedBorderColor = Color.Transparent,
-                            focusedBorderColor = PrimaryIndigo
-                        )
+                        colors = appTextFieldColors()
                     )
                 }
             }
@@ -286,6 +283,7 @@ fun DocumentsScreen(
                         value = docTitle,
                         onValueChange = { docTitle = it },
                         label = { Text("Document Title *") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -293,6 +291,7 @@ fun DocumentsScreen(
                         value = fileName,
                         onValueChange = { fileName = it },
                         label = { Text("File / Resource Name (e.g. Unit1_Notes.pdf)") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -300,6 +299,7 @@ fun DocumentsScreen(
                         value = docContent,
                         onValueChange = { docContent = it },
                         label = { Text("Notes / Summary / Key Formulas") },
+                        colors = appTextFieldColors(),
                         minLines = 3,
                         modifier = Modifier.fillMaxWidth()
                     )

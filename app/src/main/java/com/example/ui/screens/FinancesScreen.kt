@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.entities.TransactionEntity
-import com.example.ui.components.AddTransactionDialog
+import com.example.ui.components.AddTransactionBottomSheet
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.CategoryBudgetSummary
 import com.example.ui.viewmodel.StudentViewModel
@@ -36,14 +36,15 @@ fun FinancesScreen(
     val budgetSummaries by viewModel.budgetSummaries.collectAsStateWithLifecycle()
     val totalExpense by viewModel.totalExpense.collectAsStateWithLifecycle()
     val totalIncome by viewModel.totalIncome.collectAsStateWithLifecycle()
-    var showAddDialog by remember { mutableStateOf(false) }
+    val balance = totalIncome - totalExpense
+    var showAddBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.Transparent,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showAddDialog = true },
+                onClick = { showAddBottomSheet = true },
                 containerColor = TertiaryEmerald,
                 contentColor = Color.White,
                 shape = RoundedCornerShape(18.dp),
@@ -61,7 +62,7 @@ fun FinancesScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
             contentPadding = PaddingValues(bottom = 80.dp, top = 16.dp)
         ) {
-            // Income vs Expense Summary Cards
+            // Income vs Expense & Balance Summary Cards
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -74,6 +75,7 @@ fun FinancesScreen(
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text("Total Income", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 "₹${totalIncome.toInt()}",
                                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold, color = TertiaryEmerald)
@@ -88,6 +90,7 @@ fun FinancesScreen(
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text("Total Expenses", style = MaterialTheme.typography.labelSmall, color = StatusRed)
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 "₹${totalExpense.toInt()}",
                                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold, color = StatusRed)
@@ -113,11 +116,24 @@ fun FinancesScreen(
             // Transactions History
             item {
                 Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = "RECENT TRANSACTIONS (${allTransactions.size})",
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "RECENT TRANSACTIONS (${allTransactions.size})",
+                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    if (balance != 0.0) {
+                        Text(
+                            text = "Net Balance: ₹${balance.toInt()}",
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            color = if (balance >= 0) TertiaryEmerald else StatusRed
+                        )
+                    }
+                }
             }
 
             if (allTransactions.isEmpty()) {
@@ -151,7 +167,7 @@ fun FinancesScreen(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Button(
-                                onClick = { showAddDialog = true },
+                                onClick = { showAddBottomSheet = true },
                                 colors = ButtonDefaults.buttonColors(containerColor = TertiaryEmerald)
                             ) {
                                 Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
@@ -172,12 +188,12 @@ fun FinancesScreen(
         }
     }
 
-    if (showAddDialog) {
-        AddTransactionDialog(
-            onDismiss = { showAddDialog = false },
-            onConfirm = { type, amt, cat, acct, desc ->
+    if (showAddBottomSheet) {
+        AddTransactionBottomSheet(
+            onDismiss = { showAddBottomSheet = false },
+            onSave = { type, amt, cat, acct, desc ->
                 viewModel.addTransaction(type, amt, cat, acct, desc)
-                showAddDialog = false
+                showAddBottomSheet = false
             }
         )
     }

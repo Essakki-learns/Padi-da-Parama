@@ -110,6 +110,7 @@ fun SettingsScreen(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text("Full Name") },
+                colors = appTextFieldColors(),
                 modifier = Modifier.fillMaxWidth().testTag("student_name_field")
             )
 
@@ -117,6 +118,7 @@ fun SettingsScreen(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email Address") },
+                colors = appTextFieldColors(),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -124,6 +126,7 @@ fun SettingsScreen(
                 value = college,
                 onValueChange = { college = it },
                 label = { Text("College / University") },
+                colors = appTextFieldColors(),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -131,6 +134,7 @@ fun SettingsScreen(
                 value = major,
                 onValueChange = { major = it },
                 label = { Text("Major / Department") },
+                colors = appTextFieldColors(),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -142,6 +146,7 @@ fun SettingsScreen(
                     value = semester,
                     onValueChange = { semester = it },
                     label = { Text("Semester") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.weight(1f)
                 )
 
@@ -149,6 +154,7 @@ fun SettingsScreen(
                     value = currentGpa,
                     onValueChange = { currentGpa = it },
                     label = { Text("Current GPA") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.weight(1f)
                 )
 
@@ -156,6 +162,7 @@ fun SettingsScreen(
                     value = targetGpa,
                     onValueChange = { targetGpa = it },
                     label = { Text("Target GPA") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.weight(1f)
                 )
             }

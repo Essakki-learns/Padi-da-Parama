@@ -124,6 +124,7 @@ fun DashboardScreen(
                             label = { Text("Your Full Name *") },
                             placeholder = { Text("e.g. Parama Sundaram") },
                             leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                            colors = appTextFieldColors(),
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -133,6 +134,7 @@ fun DashboardScreen(
                             label = { Text("College / University *") },
                             placeholder = { Text("e.g. SKCET Coimbatore") },
                             leadingIcon = { Icon(Icons.Default.School, contentDescription = null) },
+                            colors = appTextFieldColors(),
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -142,6 +144,7 @@ fun DashboardScreen(
                             label = { Text("Course & Year *") },
                             placeholder = { Text("e.g. B.E. Computer Science - Year 3") },
                             leadingIcon = { Icon(Icons.Default.Badge, contentDescription = null) },
+                            colors = appTextFieldColors(),
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -151,6 +154,7 @@ fun DashboardScreen(
                             label = { Text("Target GPA (out of 10)") },
                             placeholder = { Text("9.0") },
                             leadingIcon = { Icon(Icons.Default.Star, contentDescription = null) },
+                            colors = appTextFieldColors(),
                             modifier = Modifier.fillMaxWidth()
                         )
 

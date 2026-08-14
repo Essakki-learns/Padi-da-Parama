@@ -3,16 +3,17 @@ package com.example.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Primary Indigo & Electric Violet
-val PrimaryIndigo = Color(0xFF4F46E5)
-val PrimaryIndigoDark = Color(0xFF3730A3)
+val PrimaryIndigo = Color(0xFF6366F1)
+val PrimaryIndigoDark = Color(0xFF4F46E5)
 val PrimaryIndigoLight = Color(0xFF818CF8)
 val PrimaryIndigoContainer = Color(0xFFEEF2FF)
 val OnPrimaryIndigoContainer = Color(0xFF1E1B4B)
 
-// Secondary Amber / Accent
+// Secondary Amber & Violet Accent
 val AccentAmber = Color(0xFFF59E0B)
 val AccentAmberContainer = Color(0xFFFEF3C7)
 val OnAccentAmberContainer = Color(0xFF78350F)
+val SecondaryViolet = Color(0xFF8B5CF6)
 
 // Tertiary Emerald / Mint
 val TertiaryEmerald = Color(0xFF10B981)
@@ -27,26 +28,26 @@ val StatusPurple = Color(0xFF8B5CF6)
 val StatusCyan = Color(0xFF06B6D4)
 
 // Frosted Glass Tokens
-val GlassSurfaceLight = Color(0xD9FFFFFF)
-val GlassSurfaceLightLow = Color(0x99FFFFFF)
-val GlassBorderLight = Color(0x99FFFFFF)
-val GlassSurfaceDark = Color(0x591E293B)
-val GlassSurfaceDarkLow = Color(0x330F172A)
-val GlassBorderDark = Color(0x33FFFFFF)
+val GlassSurfaceLight = Color(0xF2FFFFFF)
+val GlassSurfaceLightLow = Color(0xD9FFFFFF)
+val GlassBorderLight = Color(0x66E2E8F0)
+val GlassSurfaceDark = Color(0xE61E293B)
+val GlassSurfaceDarkLow = Color(0x990B1120)
+val GlassBorderDark = Color(0x33334155)
 
 // Light Palette Background & Surface
-val BackgroundLight = Color(0xFFF4F7FB)
-val SurfaceLight = Color(0xF2FFFFFF)
-val SurfaceVariantLight = Color(0xE6F1F5F9)
+val BackgroundLight = Color(0xFFF8FAFC)
+val SurfaceLight = Color(0xFFFFFFFF)
+val SurfaceVariantLight = Color(0xFFF1F5F9)
 val TextPrimaryLight = Color(0xFF0F172A)
 val TextSecondaryLight = Color(0xFF64748B)
-val OutlineLight = Color(0x80CBD5E1)
+val OutlineLight = Color(0xFFCBD5E1)
 
 // Dark Palette Background & Surface
-val BackgroundDark = Color(0xFF090D16)
-val SurfaceDark = Color(0xD9131B2E)
-val SurfaceVariantDark = Color(0x801E293B)
-val TextPrimaryDark = Color(0xFFF8FAFC)
-val TextSecondaryDark = Color(0xFF94A3B8)
-val OutlineDark = Color(0x4D475569)
+val BackgroundDark = Color(0xFF0B1120)
+val SurfaceDark = Color(0xFF1E293B)
+val SurfaceVariantDark = Color(0xFF334155)
+val TextPrimaryDark = Color(0xFFFFFFFF)
+val TextSecondaryDark = Color(0xFFE2E8F0)
+val OutlineDark = Color(0xFF64748B)
 

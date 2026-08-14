@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.luminance
 import com.example.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,9 +35,9 @@ fun AppTopBar(
     onSettingsClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val isDark = isSystemInDarkTheme()
-    val glassBg = if (isDark) Color(0x660F172A) else Color(0xCCFFFFFF)
-    val bottomBorderColor = if (isDark) Color(0x33FFFFFF) else Color(0x66FFFFFF)
+    val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    val glassBg = if (isDark) Color(0xD90F172A) else Color(0xCCFFFFFF)
+    val bottomBorderColor = if (isDark) Color(0x33FFFFFF) else Color(0x66CBD5E1)
 
     Column(
         modifier = modifier
@@ -72,7 +73,8 @@ fun AppTopBar(
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Go Back"
+                            contentDescription = "Go Back",
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 } else {
@@ -98,7 +100,8 @@ fun AppTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Search,
-                        contentDescription = "Search"
+                        contentDescription = "Search",
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 IconButton(
@@ -107,13 +110,16 @@ fun AppTopBar(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Person,
-                        contentDescription = "Student Profile and Settings"
+                        contentDescription = "Student Profile and Settings",
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
-                titleContentColor = MaterialTheme.colorScheme.onSurface
+                titleContentColor = MaterialTheme.colorScheme.onSurface,
+                navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                actionIconContentColor = MaterialTheme.colorScheme.onSurface
             )
         )
         Box(

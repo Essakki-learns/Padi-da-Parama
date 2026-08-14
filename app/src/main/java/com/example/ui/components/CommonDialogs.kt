@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.data.local.entities.SubjectEntity
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 
 // --- Add Subject Dialog ---
 @Composable
@@ -52,6 +52,7 @@ fun AddSubjectDialog(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Subject Name *") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth().testTag("subject_name_input")
                 )
 
@@ -59,6 +60,7 @@ fun AddSubjectDialog(
                     value = code,
                     onValueChange = { code = it },
                     label = { Text("Course Code (e.g. CS8601)") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -66,6 +68,7 @@ fun AddSubjectDialog(
                     value = instructor,
                     onValueChange = { instructor = it },
                     label = { Text("Instructor / Professor") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -74,12 +77,14 @@ fun AddSubjectDialog(
                         value = credits,
                         onValueChange = { credits = it },
                         label = { Text("Credits") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
                         value = targetGrade,
                         onValueChange = { targetGrade = it },
                         label = { Text("Target Grade") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -176,6 +181,7 @@ fun AddAssignmentDialog(
                     value = title,
                     onValueChange = { title = it },
                     label = { Text("Title *") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth().testTag("assignment_title_input")
                 )
 
@@ -183,6 +189,7 @@ fun AddAssignmentDialog(
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Notes / Syllabus coverage") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 3
                 )
@@ -208,12 +215,14 @@ fun AddAssignmentDialog(
                         value = daysAhead,
                         onValueChange = { daysAhead = it },
                         label = { Text("Due in Days") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
                         value = weight,
                         onValueChange = { weight = it },
                         label = { Text("Weight %") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -297,6 +306,7 @@ fun AddHabitDialog(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Habit Name *") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth().testTag("habit_name_input")
                 )
 
@@ -316,12 +326,14 @@ fun AddHabitDialog(
                         value = goal,
                         onValueChange = { goal = it },
                         label = { Text("Daily Target") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.weight(1f)
                     )
                     OutlinedTextField(
                         value = unit,
                         onValueChange = { unit = it },
                         label = { Text("Unit (e.g. mins, pages)") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.weight(1.5f)
                     )
                 }
@@ -396,6 +408,7 @@ fun AddTransactionDialog(
                     value = amount,
                     onValueChange = { amount = it },
                     label = { Text("Amount (₹) *") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth().testTag("transaction_amount_input")
                 )
 
@@ -403,6 +416,7 @@ fun AddTransactionDialog(
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Description / Merchant") },
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -444,4 +458,5 @@ fun AddTransactionDialog(
         }
     }
 }
+
 

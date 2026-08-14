@@ -21,10 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.entities.BookEntity
-import com.example.ui.theme.AccentAmber
-import com.example.ui.theme.PrimaryIndigo
-import com.example.ui.theme.TertiaryEmerald
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudentViewModel
 
 @Composable
@@ -126,6 +123,7 @@ fun BooksScreen(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text("Book Title *") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -133,6 +131,7 @@ fun BooksScreen(
                         value = author,
                         onValueChange = { author = it },
                         label = { Text("Author") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -141,12 +140,14 @@ fun BooksScreen(
                             value = genre,
                             onValueChange = { genre = it },
                             label = { Text("Genre / Category") },
+                            colors = appTextFieldColors(),
                             modifier = Modifier.weight(1f)
                         )
                         OutlinedTextField(
                             value = pages,
                             onValueChange = { pages = it },
                             label = { Text("Total Pages") },
+                            colors = appTextFieldColors(),
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -195,6 +196,7 @@ fun BooksScreen(
                         value = currentPage,
                         onValueChange = { currentPage = it },
                         label = { Text("Current Page (out of ${book.pageCount})") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -215,6 +217,7 @@ fun BooksScreen(
                         value = notes,
                         onValueChange = { notes = it },
                         label = { Text("Key Takeaways / Highlights") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth().height(100.dp)
                     )
 

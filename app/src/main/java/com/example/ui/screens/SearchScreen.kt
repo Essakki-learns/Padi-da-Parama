@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.navigation.Screen
-import com.example.ui.theme.PrimaryIndigo
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.SearchResultItem
 import com.example.ui.viewmodel.StudentViewModel
 
@@ -76,10 +75,7 @@ fun SearchScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("global_search_input"),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = PrimaryIndigo
-                    )
+                    colors = appTextFieldColors()
                 )
             }
 

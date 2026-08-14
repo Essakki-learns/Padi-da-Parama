@@ -79,7 +79,7 @@ fun StatCard(
                     Text(
                         text = subtitle,
                         style = MaterialTheme.typography.bodySmall,
-                        color = gradientColors.first()
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 

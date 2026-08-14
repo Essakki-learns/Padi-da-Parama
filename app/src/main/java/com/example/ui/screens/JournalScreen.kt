@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.entities.JournalEntryEntity
-import com.example.ui.theme.PrimaryIndigo
-import com.example.ui.theme.TertiaryEmerald
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudentViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -152,6 +150,7 @@ fun JournalScreen(
                         value = title,
                         onValueChange = { title = it },
                         label = { Text("Title (Optional)") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -159,6 +158,7 @@ fun JournalScreen(
                         value = wentWell,
                         onValueChange = { wentWell = it },
                         label = { Text("🌟 What went well today?") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -166,6 +166,7 @@ fun JournalScreen(
                         value = improve,
                         onValueChange = { improve = it },
                         label = { Text("🔄 What can I improve tomorrow?") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -173,6 +174,7 @@ fun JournalScreen(
                         value = gratitude,
                         onValueChange = { gratitude = it },
                         label = { Text("🙏 What am I grateful for?") },
+                        colors = appTextFieldColors(),
                         modifier = Modifier.fillMaxWidth()
                     )
 
