@@ -132,13 +132,43 @@ fun AssignmentsScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .frostedGlass(shape = RoundedCornerShape(18.dp))
+                            .frostedGlass(shape = RoundedCornerShape(24.dp), elevation = 4.dp)
+                            .padding(28.dp)
+                            .testTag("empty_assignments_card"),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "No tasks found in this view.",
-                            modifier = Modifier.padding(20.dp),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.AssignmentTurnedIn,
+                                contentDescription = null,
+                                modifier = Modifier.size(56.dp),
+                                tint = AccentAmber
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = if (allAssignments.isEmpty()) "No tasks or exams logged yet" else "No matching tasks found",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = if (allAssignments.isEmpty())
+                                    "Log deadlines, project submissions, and upcoming tests with custom priorities."
+                                else
+                                    "Try clearing your filter or tap '+' below to add a new task.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { showAddDialog = true },
+                                colors = ButtonDefaults.buttonColors(containerColor = PrimaryIndigo)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Add Task or Exam")
+                            }
+                        }
                     }
                 }
             } else {

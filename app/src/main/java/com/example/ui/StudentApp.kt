@@ -18,9 +18,9 @@ import com.example.ui.viewmodel.StudentViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StudentApp() {
-    val viewModel: StudentViewModel = viewModel()
-
+fun StudentApp(
+    viewModel: StudentViewModel = viewModel()
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -35,6 +35,7 @@ fun StudentApp() {
         currentRoute == Screen.Goals.route -> "Goals & Roadmap"
         currentRoute == Screen.Notes.route -> "Study Notes & Wiki"
         currentRoute == Screen.Journal.route -> "Daily Journal"
+        currentRoute == Screen.Documents.route -> "Documents & Vault"
         currentRoute == Screen.Books.route -> "Reading Tracker"
         currentRoute == Screen.Finances.route -> "Student Finances"
         currentRoute == Screen.Search.route -> "Global Search"
@@ -50,6 +51,7 @@ fun StudentApp() {
         Screen.Goals.route -> "Short & Long-term Targets"
         Screen.Notes.route -> "Knowledge Graph & [[Backlinks]]"
         Screen.Journal.route -> "Mindset, Wins & Reflections"
+        Screen.Documents.route -> "PDFs, Study Materials & Notes"
         Screen.Books.route -> "Library & Reading Progression"
         Screen.Finances.route -> "Expense Log & Category Budgets"
         Screen.Search.route -> "Unified Search across all modules"
@@ -158,6 +160,10 @@ fun StudentApp() {
 
             composable(Screen.Journal.route) {
                 JournalScreen(viewModel = viewModel)
+            }
+
+            composable(Screen.Documents.route) {
+                DocumentsScreen(viewModel = viewModel)
             }
 
             composable(Screen.Books.route) {

@@ -208,6 +208,8 @@ interface StudentDao {
     suspend fun deleteDocument(document: DocumentEntity)
 
     // Clear all for demo reset
+    @Query("DELETE FROM student_profile")
+    suspend fun clearProfile()
     @Query("DELETE FROM subjects")
     suspend fun clearSubjects()
     @Query("DELETE FROM assignments")

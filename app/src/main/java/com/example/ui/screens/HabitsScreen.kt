@@ -129,12 +129,50 @@ fun HabitsScreen(
                 )
             }
 
-            items(habitsWithStreaks) { item ->
-                HabitDetailedCard(
-                    item = item,
-                    onToggle = { viewModel.toggleHabitToday(item) },
-                    onDelete = { viewModel.deleteHabit(item.habit) }
-                )
+            if (habitsWithStreaks.isEmpty()) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .frostedGlass(shape = RoundedCornerShape(24.dp), elevation = 4.dp)
+                            .padding(28.dp)
+                            .testTag("empty_habits_card"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("⚡", fontSize = 48.sp)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "No habits tracked yet",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "Build atomic study routines, revision habits, coding practice, and sleep consistency.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { showAddDialog = true },
+                                colors = ButtonDefaults.buttonColors(containerColor = AccentAmber)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Create Your First Habit")
+                            }
+                        }
+                    }
+                }
+            } else {
+                items(habitsWithStreaks) { item ->
+                    HabitDetailedCard(
+                        item = item,
+                        onToggle = { viewModel.toggleHabitToday(item) },
+                        onDelete = { viewModel.deleteHabit(item.habit) }
+                    )
+                }
             }
         }
     }

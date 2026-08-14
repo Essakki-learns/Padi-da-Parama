@@ -8,14 +8,14 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "student_profile")
 data class StudentProfileEntity(
     @PrimaryKey val id: Long = 1L,
-    val name: String = "Parama",
-    val email: String = "parama@university.edu",
-    val college: String = "SKCET",
-    val year: Int = 3,
-    val major: String = "Computer Science & Engineering",
-    val targetGpa: Double = 9.5,
-    val currentGpa: Double = 8.92,
-    val semester: String = "Semester 6"
+    val name: String = "",
+    val email: String = "",
+    val college: String = "",
+    val year: Int = 1,
+    val major: String = "",
+    val targetGpa: Double = 0.0,
+    val currentGpa: Double = 0.0,
+    val semester: String = ""
 )
 
 @Entity(tableName = "subjects")

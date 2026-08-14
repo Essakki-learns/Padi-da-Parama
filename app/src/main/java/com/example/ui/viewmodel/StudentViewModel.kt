@@ -53,19 +53,19 @@ data class SearchResultItem(
 class StudentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: StudentRepository
+    private val prefs = application.getSharedPreferences("student_app_prefs", android.content.Context.MODE_PRIVATE)
+
+    private val _isDarkTheme = MutableStateFlow(prefs.getBoolean("is_dark_mode", true))
+    val isDarkTheme: StateFlow<Boolean> = _isDarkTheme.asStateFlow()
+
+    fun toggleTheme(isDark: Boolean) {
+        _isDarkTheme.value = isDark
+        prefs.edit().putBoolean("is_dark_mode", isDark).apply()
+    }
 
     init {
         val database = AppDatabase.getDatabase(application)
         repository = StudentRepository(database.studentDao())
-
-        // Initial preloading if empty
-        viewModelScope.launch {
-            repository.allSubjects.firstOrNull()?.let { list ->
-                if (list.isEmpty()) {
-                    repository.resetAllData()
-                }
-            }
-        }
     }
 
     val profile: StateFlow<StudentProfileEntity?> = repository.profile
@@ -713,6 +713,24 @@ class StudentViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // Profile & Reset
+    fun setupInitialProfile(name: String, college: String, courseYear: String, targetGpa: Double = 9.0) {
+        viewModelScope.launch {
+            repository.updateProfile(
+                StudentProfileEntity(
+                    id = 1L,
+                    name = name,
+                    email = "",
+                    college = college,
+                    major = courseYear,
+                    year = 1,
+                    targetGpa = targetGpa,
+                    currentGpa = 0.0,
+                    semester = "Semester 1"
+                )
+            )
+        }
+    }
+
     fun updateProfile(name: String, email: String, college: String, major: String, year: Int, targetGpa: Double, currentGpa: Double, semester: String) {
         viewModelScope.launch {
             repository.updateProfile(
@@ -728,6 +746,12 @@ class StudentViewModel(application: Application) : AndroidViewModel(application)
                     semester = semester
                 )
             )
+        }
+    }
+
+    fun clearAllData() {
+        viewModelScope.launch {
+            repository.clearAllData()
         }
     }
 

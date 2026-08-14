@@ -64,6 +64,124 @@ fun DashboardScreen(
     var showAddSubjectDialog by remember { mutableStateOf(false) }
     var showAddTransactionDialog by remember { mutableStateOf(false) }
 
+    // Check if user has initialized their profile
+    if (profile == null || profile?.name?.isBlank() == true) {
+        var setupName by remember { mutableStateOf("") }
+        var setupCollege by remember { mutableStateOf("") }
+        var setupCourse by remember { mutableStateOf("") }
+        var setupTargetGpa by remember { mutableStateOf("9.0") }
+
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .testTag("dashboard_onboarding_view"),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(vertical = 12.dp)
+        ) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .frostedGlass(shape = RoundedCornerShape(24.dp), elevation = 6.dp)
+                        .padding(24.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Surface(
+                            shape = CircleShape,
+                            color = PrimaryIndigo.copy(alpha = 0.15f),
+                            modifier = Modifier.size(64.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.School,
+                                    contentDescription = null,
+                                    tint = PrimaryIndigo,
+                                    modifier = Modifier.size(36.dp)
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = "Welcome to Padi da Parama! 🎓",
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+
+                        Text(
+                            text = "Set up your student profile to personalize your dashboard, track coursework, tasks, and streaks.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+
+                        OutlinedTextField(
+                            value = setupName,
+                            onValueChange = { setupName = it },
+                            label = { Text("Your Full Name *") },
+                            placeholder = { Text("e.g. Parama Sundaram") },
+                            leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = setupCollege,
+                            onValueChange = { setupCollege = it },
+                            label = { Text("College / University *") },
+                            placeholder = { Text("e.g. SKCET Coimbatore") },
+                            leadingIcon = { Icon(Icons.Default.School, contentDescription = null) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = setupCourse,
+                            onValueChange = { setupCourse = it },
+                            label = { Text("Course & Year *") },
+                            placeholder = { Text("e.g. B.E. Computer Science - Year 3") },
+                            leadingIcon = { Icon(Icons.Default.Badge, contentDescription = null) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        OutlinedTextField(
+                            value = setupTargetGpa,
+                            onValueChange = { setupTargetGpa = it },
+                            label = { Text("Target GPA (out of 10)") },
+                            placeholder = { Text("9.0") },
+                            leadingIcon = { Icon(Icons.Default.Star, contentDescription = null) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Button(
+                            onClick = {
+                                if (setupName.isNotBlank()) {
+                                    val gpa = setupTargetGpa.toDoubleOrNull() ?: 9.0
+                                    viewModel.setupInitialProfile(
+                                        name = setupName.trim(),
+                                        college = setupCollege.trim().ifBlank { "University" },
+                                        courseYear = setupCourse.trim().ifBlank { "Student" },
+                                        targetGpa = gpa
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                                .testTag("setup_profile_submit_button"),
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = PrimaryIndigo)
+                        ) {
+                            Text("Complete Setup & Open Dashboard", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+                        }
+                    }
+                }
+            }
+        }
+        return
+    }
+
     val activeHabitDates = remember(habitLogs) {
         habitLogs.filter { it.completed }.map { it.dateString }.toSet()
     }
@@ -73,6 +191,7 @@ fun DashboardScreen(
         QuickNavTile("Tasks & Exams", "${upcomingTasks.size} Pending", Icons.Default.AssignmentTurnedIn, AccentAmber, Screen.Assignments),
         QuickNavTile("Daily Journal", "Reflect & Grow", Icons.Default.MenuBook, StatusPurple, Screen.Journal),
         QuickNavTile("Notes & Links", "Wiki Knowledge", Icons.Default.EditNote, StatusCyan, Screen.Notes),
+        QuickNavTile("Documents Vault", "PDFs & Materials", Icons.Default.Folder, PrimaryIndigoLight, Screen.Documents),
         QuickNavTile("Book Tracker", "Reading List", Icons.Default.Bookmark, TertiaryEmerald, Screen.Books),
         QuickNavTile("Goals Roadmap", "Target Success", Icons.Default.Flag, StatusRed, Screen.Goals),
         QuickNavTile("Habit Streaks", "Build Discipline", Icons.Default.LocalFireDepartment, AccentAmber, Screen.Habits),
@@ -144,13 +263,13 @@ fun DashboardScreen(
                     ) {
                         Column {
                             Text(
-                                text = "${profile?.college ?: "SKCET"} • ${profile?.semester ?: "Semester 6"}",
+                                text = "${profile?.college ?: "University"} • ${profile?.semester ?: "Current Term"}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = profile?.major ?: "Computer Science",
+                                text = profile?.major ?: "Student Course",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -185,8 +304,8 @@ fun DashboardScreen(
             ) {
                 StatCard(
                     title = "TARGET GPA",
-                    value = "${profile?.currentGpa ?: 9.14} / 10",
-                    subtitle = "Goal: ${profile?.targetGpa ?: 9.5}",
+                    value = if ((profile?.targetGpa ?: 0.0) > 0) "${profile?.targetGpa} / 10" else "Set Target",
+                    subtitle = if ((profile?.currentGpa ?: 0.0) > 0) "Current: ${profile?.currentGpa}" else "Tap to Track Courses",
                     icon = Icons.Default.TrendingUp,
                     gradientColors = listOf(PrimaryIndigo, PrimaryIndigoLight),
                     onClick = { onNavigate(Screen.Academics) },

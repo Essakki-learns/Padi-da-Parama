@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.R
-import com.example.ui.theme.PrimaryIndigo
-import com.example.ui.theme.StatusRed
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudentViewModel
 
 @Composable
@@ -32,16 +30,18 @@ fun SettingsScreen(
     modifier: Modifier = Modifier
 ) {
     val profile by viewModel.profile.collectAsStateWithLifecycle()
+    val isDarkTheme by viewModel.isDarkTheme.collectAsStateWithLifecycle()
 
     var name by remember(profile) { mutableStateOf(profile?.name ?: "") }
     var email by remember(profile) { mutableStateOf(profile?.email ?: "") }
     var college by remember(profile) { mutableStateOf(profile?.college ?: "") }
     var major by remember(profile) { mutableStateOf(profile?.major ?: "") }
-    var semester by remember(profile) { mutableStateOf(profile?.semester ?: "Semester 6") }
-    var targetGpa by remember(profile) { mutableStateOf(profile?.targetGpa?.toString() ?: "9.5") }
-    var currentGpa by remember(profile) { mutableStateOf(profile?.currentGpa?.toString() ?: "9.14") }
+    var semester by remember(profile) { mutableStateOf(profile?.semester ?: "Semester 1") }
+    var targetGpa by remember(profile) { mutableStateOf(profile?.targetGpa?.toString() ?: "9.0") }
+    var currentGpa by remember(profile) { mutableStateOf(profile?.currentGpa?.toString() ?: "0.0") }
 
     var showResetConfirmDialog by remember { mutableStateOf(false) }
+    var showClearConfirmDialog by remember { mutableStateOf(false) }
     var showSavedSnackbar by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -200,9 +200,67 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
+            // Appearance & Theme Card
+            Text(
+                text = "APPEARANCE & THEME",
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .frostedGlass(shape = RoundedCornerShape(20.dp), elevation = 2.dp)
+                    .testTag("theme_settings_card")
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(18.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            shape = CircleShape,
+                            color = if (isDarkTheme) PrimaryIndigo.copy(alpha = 0.2f) else AccentAmber.copy(alpha = 0.2f),
+                            modifier = Modifier.size(44.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = if (isDarkTheme) Icons.Default.DarkMode else Icons.Default.LightMode,
+                                    contentDescription = null,
+                                    tint = if (isDarkTheme) PrimaryIndigoLight else AccentAmber
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(14.dp))
+                        Column {
+                            Text(
+                                text = if (isDarkTheme) "Dark Theme" else "Light Theme",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Text(
+                                text = if (isDarkTheme) "OLED-friendly dark obsidian palette" else "Clean bright high-contrast palette",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    Switch(
+                        checked = isDarkTheme,
+                        onCheckedChange = { viewModel.toggleTheme(it) },
+                        modifier = Modifier.testTag("dark_mode_switch")
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
             // Data Operations
             Text(
-                text = "DATABASE & SAMPLE DATA",
+                text = "DATABASE & STORAGE",
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold, letterSpacing = 1.sp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -212,28 +270,67 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .frostedGlass(shape = RoundedCornerShape(20.dp), elevation = 1.dp)
             ) {
-                Column(modifier = Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Sample Data & Reset", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
+                Column(modifier = Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text("Data Persistence & Controls", style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold))
                     Text(
-                        "Reload comprehensive sample courses, syllabus trees, upcoming assignments, habit streaks, goals, books, and budget transactions.",
+                        "All your courses, tasks, habit logs, reading progress, and documents are stored 100% locally on your device with Room SQLite.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    OutlinedButton(
-                        onClick = { showResetConfirmDialog = true },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryIndigo),
-                        modifier = Modifier.fillMaxWidth().testTag("seed_sample_data_button")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        Icon(Icons.Default.Refresh, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Reset & Preload University Sample Data")
+                        OutlinedButton(
+                            onClick = { showClearConfirmDialog = true },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = StatusRed),
+                            modifier = Modifier.weight(1f).testTag("clear_data_button")
+                        ) {
+                            Icon(Icons.Default.DeleteSweep, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Clear All Data")
+                        }
+
+                        OutlinedButton(
+                            onClick = { showResetConfirmDialog = true },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryIndigo),
+                            modifier = Modifier.weight(1f).testTag("seed_sample_data_button")
+                        ) {
+                            Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Load Demo")
+                        }
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(40.dp))
         }
+    }
+
+    if (showClearConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearConfirmDialog = false },
+            title = { Text("Clear All User Data?") },
+            text = { Text("This will remove all enrolled courses, assignments, habits, and profile details for a completely clean slate.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.clearAllData()
+                        showClearConfirmDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = StatusRed)
+                ) {
+                    Text("Clear Everything")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearConfirmDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 
     if (showResetConfirmDialog) {

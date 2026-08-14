@@ -21,9 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.AddSubjectDialog
-import com.example.ui.theme.PrimaryIndigo
-import com.example.ui.theme.TertiaryEmerald
-import com.example.ui.theme.frostedGlass
+import com.example.ui.theme.*
 import com.example.ui.viewmodel.StudentViewModel
 import com.example.ui.viewmodel.SubjectWithStats
 
@@ -85,7 +83,7 @@ fun AcademicsScreen(
                     ) {
                         Column {
                             Text(
-                                text = "${profile?.semester ?: "Semester 6"} Academics",
+                                text = "${profile?.semester?.ifEmpty { "Semester" } ?: "Academic Term"} Courses",
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -132,13 +130,40 @@ fun AcademicsScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .frostedGlass(shape = RoundedCornerShape(18.dp))
+                            .frostedGlass(shape = RoundedCornerShape(24.dp), elevation = 4.dp)
+                            .padding(28.dp)
+                            .testTag("empty_academics_card"),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "No subjects added yet. Tap '+' to create your first course.",
-                            modifier = Modifier.padding(20.dp),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.School,
+                                contentDescription = null,
+                                modifier = Modifier.size(56.dp),
+                                tint = PrimaryIndigoLight
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "No courses enrolled yet",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "Add your courses, credit weights, and syllabus topics to track your semester.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { showAddSubjectDialog = true },
+                                colors = ButtonDefaults.buttonColors(containerColor = PrimaryIndigo)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Add Your First Course")
+                            }
+                        }
                     }
                 }
             } else {

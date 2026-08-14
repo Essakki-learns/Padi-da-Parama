@@ -96,8 +96,9 @@ class StudentRepository(private val dao: StudentDao) {
     suspend fun insertDocument(document: DocumentEntity) = dao.insertDocument(document)
     suspend fun deleteDocument(document: DocumentEntity) = dao.deleteDocument(document)
 
-    // Reset / Seed Sample Data
-    suspend fun resetAllData() {
+    // Clear all data (user-driven clean slate)
+    suspend fun clearAllData() {
+        dao.clearProfile()
         dao.clearSubjects()
         dao.clearAssignments()
         dao.clearSyllabusNodes()
@@ -111,6 +112,11 @@ class StudentRepository(private val dao: StudentDao) {
         dao.clearTransactions()
         dao.clearBudgets()
         dao.clearDocuments()
+    }
+
+    // Reset / Seed Sample Data
+    suspend fun resetAllData() {
+        clearAllData()
         com.example.data.local.DatabasePreloader.seedInitialData(dao)
     }
 }

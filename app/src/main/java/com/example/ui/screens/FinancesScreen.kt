@@ -125,13 +125,40 @@ fun FinancesScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .frostedGlass(shape = RoundedCornerShape(18.dp))
+                            .frostedGlass(shape = RoundedCornerShape(24.dp), elevation = 4.dp)
+                            .padding(28.dp)
+                            .testTag("empty_finances_card"),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "No transactions logged yet. Tap '+' to record your student expenses.",
-                            modifier = Modifier.padding(20.dp),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.AccountBalanceWallet,
+                                contentDescription = null,
+                                modifier = Modifier.size(56.dp),
+                                tint = TertiaryEmerald
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "No transactions logged yet",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = "Track hostel mess fees, books, chai, canteen, printouts, and monthly allowance.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { showAddDialog = true },
+                                colors = ButtonDefaults.buttonColors(containerColor = TertiaryEmerald)
+                            ) {
+                                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text("Log First Expense / Income")
+                            }
+                        }
                     }
                 }
             } else {
