@@ -13,13 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java (v5 fixes Node 20 warning)
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
 
-      # 1. CRITICAL: We must install Flutter FIRST
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.16.0
         with:
@@ -27,18 +26,19 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # 2. Setup Gradle
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      # THIS IS THE FIX: Move into the ./app folder to find pubspec.yaml
+      - name: Install Dependencies
+        working-directory: ./app
+        run: flutter pub get
 
-      # 3. Build the Debug APK using Gradle
-      # Added --no-daemon to prevent the AWT-EventQueue headless crash!
+      # THIS IS THE FIX: Let Flutter run Gradle for us, not raw Gradle
       - name: Build Debug APK
-        run: gradle :app:assembleDebug --no-daemon
+        working-directory: ./app
+        run: flutter build apk --debug --split-per-abi
 
-      # 4. Upload the APK
+      # Flutter stores the APK at ./app/build/app/outputs/flutter-apk/
       - name: Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: apk-debug
-          path: app/build/outputs/apk/debug/*.apk
+          path: app/build/app/outputs/flutter-apk/*.apk
