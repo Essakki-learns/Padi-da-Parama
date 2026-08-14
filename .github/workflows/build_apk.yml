@@ -19,22 +19,14 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2.16.0
-        with:
-          flutter-version: '3.x'
-          channel: 'stable'
-          cache: true
-
-      - name: Install Dependencies
-        run: flutter pub get
-        # working-directory was removed because it was causing a double-folder error.
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build Debug APK
-        run: flutter build apk --debug --split-per-abi
+        run: gradle :app:assembleDebug
 
       - name: Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: apk-debug
-          path: build/app/outputs/flutter-apk/*.apk
+          path: app/build/outputs/apk/debug/*.apk
