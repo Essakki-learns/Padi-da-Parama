@@ -1,44 +1,52 @@
-name: Build and Upload APK
+name: Build Android APK
 
 on:
   push:
+    branches: [ "main", "master" ]
+  pull_request:
     branches: [ "main", "master" ]
   workflow_dispatch:
 
 jobs:
   build:
+    name: Generate Release & Debug APKs
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Java (v5 fixes Node 20 warning)
-        uses: actions/setup-java@v5
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
           java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2.16.0
-        with:
-          flutter-version: '3.x'
-          channel: 'stable'
-          cache: true
+      - name: Grant execute permission for gradlew
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x gradlew
+          fi
 
-      # THIS IS THE FIX: Move into the ./app folder to find pubspec.yaml
-      - name: Install Dependencies
-        working-directory: ./app
-        run: flutter pub get
+      - name: Decode Debug Keystore
+        run: |
+          if [ -f "debug.keystore.base64" ]; then
+            base64 -d debug.keystore.base64 > app/debug.keystore || base64 -d debug.keystore.base64 > debug.keystore
+          fi
 
-      # THIS IS THE FIX: Let Flutter run Gradle for us, not raw Gradle
-      - name: Build Debug APK
-        working-directory: ./app
-        run: flutter build apk --debug --split-per-abi
+      - name: Build with Gradle
+        run: |
+          if [ -f "./gradlew" ]; then
+            ./gradlew assembleDebug --stacktrace
+          else
+            gradle assembleDebug --stacktrace
+          fi
 
-      # Flutter stores the APK at ./app/build/app/outputs/flutter-apk/
-      - name: Upload APK Artifacts
+      - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: apk-debug
-          path: app/build/app/outputs/flutter-apk/*.apk
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14

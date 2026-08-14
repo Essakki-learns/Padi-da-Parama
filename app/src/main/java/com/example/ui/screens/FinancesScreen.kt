@@ -1,9 +1,11 @@
 package com.example.ui.screens
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -109,8 +111,23 @@ fun FinancesScreen(
                 )
             }
 
-            items(budgetSummaries) { budget ->
-                BudgetProgressCard(summary = budget)
+            itemsIndexed(
+                items = budgetSummaries,
+                key = { _, item -> item.category }
+            ) { index, budget ->
+                var itemVisible by remember { mutableStateOf(false) }
+                LaunchedEffect(Unit) {
+                    itemVisible = true
+                }
+                AnimatedVisibility(
+                    visible = itemVisible,
+                    enter = slideInVertically(
+                        initialOffsetY = { 40 * (index + 1) },
+                        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+                    ) + fadeIn(animationSpec = tween(durationMillis = 300))
+                ) {
+                    BudgetProgressCard(summary = budget)
+                }
             }
 
             // Transactions History
@@ -178,11 +195,30 @@ fun FinancesScreen(
                     }
                 }
             } else {
-                items(allTransactions) { tx ->
-                    TransactionItemRow(
-                        transaction = tx,
-                        onDelete = { viewModel.deleteTransaction(tx) }
-                    )
+                itemsIndexed(
+                    items = allTransactions,
+                    key = { _, tx -> tx.id }
+                ) { index, tx ->
+                    var itemVisible by remember { mutableStateOf(false) }
+                    LaunchedEffect(tx.id) {
+                        itemVisible = true
+                    }
+                    AnimatedVisibility(
+                        visible = itemVisible,
+                        enter = slideInVertically(
+                            initialOffsetY = { 50 },
+                            animationSpec = tween(durationMillis = 280, easing = FastOutSlowInEasing)
+                        ) + fadeIn(animationSpec = tween(durationMillis = 280)),
+                        exit = slideOutHorizontally(
+                            targetOffsetX = { -it },
+                            animationSpec = tween(durationMillis = 200)
+                        ) + fadeOut()
+                    ) {
+                        TransactionItemRow(
+                            transaction = tx,
+                            onDelete = { viewModel.deleteTransaction(tx) }
+                        )
+                    }
                 }
             }
         }
@@ -203,6 +239,12 @@ fun FinancesScreen(
 fun BudgetProgressCard(summary: CategoryBudgetSummary) {
     val isOverBudget = summary.spent > summary.limit
     val progressColor = if (isOverBudget) StatusRed else PrimaryIndigo
+
+    val animatedProgress by animateFloatAsState(
+        targetValue = (summary.percentage / 100f).coerceIn(0f, 1f),
+        animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
+        label = "budget_progress"
+    )
 
     Box(
         modifier = Modifier
@@ -228,7 +270,7 @@ fun BudgetProgressCard(summary: CategoryBudgetSummary) {
 
             Spacer(modifier = Modifier.height(6.dp))
             LinearProgressIndicator(
-                progress = { summary.percentage / 100f },
+                progress = { animatedProgress },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -257,7 +299,9 @@ fun TransactionItemRow(
             .testTag("transaction_row_${transaction.id}")
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(14.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
