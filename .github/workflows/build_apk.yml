@@ -1,0 +1,45 @@
+name: Build and Upload APK
+
+# This triggers the build whenever you push to main/master, or you can trigger it manually.
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:  # Allows you to run this workflow manually from GitHub website
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Using Ubuntu to compile your Android app
+
+    steps:
+      # 1. Get your code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Java (Required for Android builds)
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 3. Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      # 4. Get all your package dependencies
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # 5. Build the APK (Using --debug so it installs easily without requiring digital signing!)
+      - name: Build Debug APK
+        run: flutter build apk --debug --split-per-abi
+
+      # 6. Upload the generated APK to GitHub Actions Artifacts
+      - name: Upload APK Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-debug
+          path: build/app/outputs/flutter-apk/*.apk
